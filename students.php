@@ -1,10 +1,10 @@
 <?php
 include "db_connection.php";
 
-/* Departments */
+/* جلب التخصصات */
 $departments = mysqli_query($conn, "SELECT DISTINCT department FROM students");
 
-/* Filter */
+/* فلترة */
 $selected_department = "";
 $sql = "SELECT * FROM students";
 
@@ -19,13 +19,13 @@ $result = mysqli_query($conn, $sql);
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Students</title>
+    <title>Students List</title>
 </head>
 <body>
 
 <h2>Students List</h2>
 
-<!-- Filter -->
+<!-- 🔍 Filter -->
 <form method="GET">
     <strong>Search By Department:</strong>
     <select name="department">
@@ -42,7 +42,7 @@ $result = mysqli_query($conn, $sql);
 
 <hr>
 
-<!-- Update All -->
+<!-- 🔄 Update all departments -->
 <h3>Update Department for All Students</h3>
 <form method="POST" action="update_all_departments.php">
     <input type="text" name="new_department" required>
@@ -51,7 +51,19 @@ $result = mysqli_query($conn, $sql);
 
 <hr>
 
-<table border="1" cellpadding="8">
+<!-- 🚨 Danger Zone -->
+<h3 style="color:red;">Danger Zone</h3>
+<form method="POST" action="delete_all_students.php"
+      onsubmit="return confirm('Are you sure you want to delete ALL students?');">
+    <button type="submit" style="background:red;color:white;">
+        Delete All Students
+    </button>
+</form>
+
+<hr>
+
+<!-- 📋 Table -->
+<table border="1" cellpadding="8" cellspacing="0">
 <tr>
     <th>ID</th>
     <th>Student No</th>
@@ -60,7 +72,7 @@ $result = mysqli_query($conn, $sql);
     <th>Department</th>
     <th>Phone</th>
     <th>DOB</th>
-    <th>Action</th>
+    <th>Actions</th>
 </tr>
 
 <?php while ($s = mysqli_fetch_assoc($result)) { ?>
@@ -74,6 +86,11 @@ $result = mysqli_query($conn, $sql);
     <td><?php echo $s['birth_date']; ?></td>
     <td>
         <a href="edit_student.php?id=<?php echo $s['id']; ?>">Update</a>
+        |
+        <a href="delete_student.php?id=<?php echo $s['id']; ?>"
+           onclick="return confirm('Are you sure you want to delete this student?');">
+           Delete
+        </a>
     </td>
 </tr>
 <?php } ?>
@@ -81,7 +98,7 @@ $result = mysqli_query($conn, $sql);
 </table>
 
 <br>
-<a href="index.html">Add Student</a>
+<a href="index.html">➕ Add New Student</a>
 
 </body>
 </html>
