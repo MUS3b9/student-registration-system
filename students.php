@@ -1,16 +1,16 @@
 <?php
 include "db_connection.php";
 
-/* جلب التخصصات بدون تكرار */
+/* Departments */
 $departments = mysqli_query($conn, "SELECT DISTINCT department FROM students");
 
-/* فلترة */
+/* Filter */
 $selected_department = "";
 $sql = "SELECT * FROM students";
 
 if (isset($_GET['department']) && $_GET['department'] != "") {
     $selected_department = $_GET['department'];
-    $sql .= " WHERE department = '$selected_department'";
+    $sql .= " WHERE department='$selected_department'";
 }
 
 $result = mysqli_query($conn, $sql);
@@ -19,59 +19,69 @@ $result = mysqli_query($conn, $sql);
 <!DOCTYPE html>
 <html>
 <head>
-    <title>View Students</title>
+    <title>Students</title>
 </head>
 <body>
 
 <h2>Students List</h2>
 
-<!-- 🔍 الفلتر -->
+<!-- Filter -->
 <form method="GET">
-    <label><strong>Search By Department:</strong></label>
-
+    <strong>Search By Department:</strong>
     <select name="department">
-        <option value="">-- All Departments --</option>
-
-        <?php while ($row = mysqli_fetch_assoc($departments)) { ?>
-            <option value="<?php echo $row['department']; ?>"
-                <?php if ($row['department'] == $selected_department) echo "selected"; ?>>
-                <?php echo $row['department']; ?>
+        <option value="">All</option>
+        <?php while ($d = mysqli_fetch_assoc($departments)) { ?>
+            <option value="<?php echo $d['department']; ?>"
+                <?php if ($d['department'] == $selected_department) echo "selected"; ?>>
+                <?php echo $d['department']; ?>
             </option>
         <?php } ?>
     </select>
-
     <button type="submit">Search</button>
 </form>
 
-<br><br>
+<hr>
 
-<!-- 📋 جدول الطلاب -->
+<!-- Update All -->
+<h3>Update Department for All Students</h3>
+<form method="POST" action="update_all_departments.php">
+    <input type="text" name="new_department" required>
+    <button type="submit">Apply</button>
+</form>
+
+<hr>
+
 <table border="1" cellpadding="8">
-    <tr>
-        <th>ID</th>
-        <th>Student Number</th>
-        <th>Full Name</th>
-        <th>Email</th>
-        <th>Department</th>
-        <th>Phone</th>
-        <th>Date of Birth</th>
-    </tr>
+<tr>
+    <th>ID</th>
+    <th>Student No</th>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Department</th>
+    <th>Phone</th>
+    <th>DOB</th>
+    <th>Action</th>
+</tr>
 
-    <?php while ($student = mysqli_fetch_assoc($result)) { ?>
-    <tr>
-        <td><?php echo $student['id']; ?></td>
-        <td><?php echo $student['student_number']; ?></td>
-        <td><?php echo $student['full_name']; ?></td>
-        <td><?php echo $student['email']; ?></td>
-        <td><?php echo $student['department']; ?></td>
-        <td><?php echo $student['phone']; ?></td>
-        <td><?php echo $student['birth_date']; ?></td>
-    </tr>
-    <?php } ?>
+<?php while ($s = mysqli_fetch_assoc($result)) { ?>
+<tr>
+    <td><?php echo $s['id']; ?></td>
+    <td><?php echo $s['student_number']; ?></td>
+    <td><?php echo $s['full_name']; ?></td>
+    <td><?php echo $s['email']; ?></td>
+    <td><?php echo $s['department']; ?></td>
+    <td><?php echo $s['phone']; ?></td>
+    <td><?php echo $s['birth_date']; ?></td>
+    <td>
+        <a href="edit_student.php?id=<?php echo $s['id']; ?>">Update</a>
+    </td>
+</tr>
+<?php } ?>
+
 </table>
 
 <br>
-<a href="index.html">➕ Add New Student</a>
+<a href="index.html">Add Student</a>
 
 </body>
 </html>
