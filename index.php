@@ -1,3 +1,7 @@
+<?php
+include "auth.php";   // 🔐 حماية الصفحة
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -30,7 +34,8 @@
 </form>
 
 <br>
-<a href="students.php">View Students</a>
+<a href="students.php">View Students</a> |
+<a href="admin.php">Back to Admin</a>
 
 </body>
 </html>

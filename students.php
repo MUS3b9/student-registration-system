@@ -1,4 +1,5 @@
 <?php
+include "auth.php";       // 🔐 حماية الصفحة
 include "db_connection.php";
 
 /* جلب التخصصات */
@@ -98,7 +99,8 @@ $result = mysqli_query($conn, $sql);
 </table>
 
 <br>
-<a href="index.html">➕ Add New Student</a>
+<a href="index.php">➕ Add New Student</a> |
+<a href="admin.php">⬅ Back to Admin</a>
 
 </body>
 </html>
