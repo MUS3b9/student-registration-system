@@ -1,7 +1,6 @@
 <?php
 include "auth.php";
 ?>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,7 +9,8 @@ include "auth.php";
 <body>
 
 <h2>Admin Panel</h2>
-<p>Welcome, <?php echo $_SESSION['username']; ?></p>
+
+<p>Welcome, <?php echo $_COOKIE['username']; ?></p>
 
 <ul>
     <li><a href="students.php">Manage Students</a></li>
